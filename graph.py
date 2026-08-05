@@ -1,0 +1,89 @@
+import os
+from dotenv import load_dotenv
+from langgraph.graph import StateGraph, START, END
+from typing import TypedDict
+from supervisor import supervisor_node
+from synthesize import synthesize_node
+from performance import performance_node
+from curriculum import curriculum_node
+from resource import resource_node
+from study_plan import study_plan_node
+from judge import judge_node
+
+load_dotenv()
+
+
+class StudentState(TypedDict):
+    question:                str
+    student_id:              int
+    supervisor_instructions: str
+    performance_result:      str
+    curriculum_result:       str
+    resource_result:         str
+    study_plan_result:       str
+    draft_answer:            str
+    judge_feedback:          str
+    final_answer:            str
+    retry_count:             int
+
+
+def should_retry(state: StudentState) -> str:
+    if state["final_answer"]:
+        return "end"
+    if state["retry_count"] >= 2:
+        return "end"
+    return "retry"
+
+
+def force_final(state: StudentState) -> dict:
+    if not state["final_answer"]:
+        return {"final_answer": state["draft_answer"]}
+    return {}
+
+
+graph_builder = StateGraph(StudentState)
+
+graph_builder.add_node("supervisor",  supervisor_node)
+graph_builder.add_node("synthesize",  synthesize_node)
+graph_builder.add_node("performance", performance_node)
+graph_builder.add_node("curriculum",  curriculum_node)
+graph_builder.add_node("resource",    resource_node)
+graph_builder.add_node("study_plan",  study_plan_node)
+#graph_builder.add_node("judge",       judge_node)
+#graph_builder.add_node("force_final", force_final)
+
+
+graph_builder.add_edge(START, "supervisor")
+
+# fan out
+graph_builder.add_edge("supervisor",  "performance")
+graph_builder.add_edge("supervisor",  "curriculum")
+graph_builder.add_edge("supervisor",  "resource")
+graph_builder.add_edge("supervisor",  "study_plan")
+
+# fan in → synthesize (just a collector)
+graph_builder.add_edge("performance", "synthesize")
+graph_builder.add_edge("curriculum",  "synthesize")
+graph_builder.add_edge("resource",    "synthesize")
+graph_builder.add_edge("study_plan",  "synthesize")
+
+# synthesize → supervisor (second call)
+graph_builder.add_edge("synthesize",  "supervisor")
+
+# supervisor → judge
+# graph_builder.add_edge("supervisor",  "judge")
+
+# graph_builder.add_conditional_edges(
+#     "judge",
+#     should_retry,
+#     {
+#         "end":   "force_final",
+#         "retry": "supervisor"
+#     }
+# )
+
+#graph_builder.add_edge("force_final", END)
+
+graph_builder.add_edge("supervisor", END)
+
+graph = graph_builder.compile()

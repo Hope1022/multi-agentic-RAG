@@ -1,0 +1,48 @@
+# Python virtual environment
+venv/
+
+# Environment variables
+.env
+.env.*
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# Pytest
+.pytest_cache/
+
+# MyPy
+.mypy_cache/
+
+# VS Code settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database files
+db/**/*.sqlite3
+db/**/*.db
+
+# Chroma database files
+db/chroma_db/
+
+# Logs
+*.log
+
+# Secrets and local overrides
+*.secret
+credentials.json
+
+# Jupyter
+.ipynb_checkpoints/
