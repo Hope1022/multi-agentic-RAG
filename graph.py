@@ -51,24 +51,19 @@ graph_builder.add_node("resource",    resource_node)
 graph_builder.add_node("study_plan",  study_plan_node)
 #graph_builder.add_node("judge",       judge_node)
 #graph_builder.add_node("force_final", force_final)
-
+def route_supervisor(state):
+    if state["draft_answer"]:
+        return END
+    return ["performance", "curriculum", "resource", "study_plan"]
 
 graph_builder.add_edge(START, "supervisor")
-
-# fan out
-graph_builder.add_edge("supervisor",  "performance")
-graph_builder.add_edge("supervisor",  "curriculum")
-graph_builder.add_edge("supervisor",  "resource")
-graph_builder.add_edge("supervisor",  "study_plan")
-
-# fan in → synthesize (just a collector)
+graph_builder.add_conditional_edges("supervisor", route_supervisor)
 graph_builder.add_edge("performance", "synthesize")
 graph_builder.add_edge("curriculum",  "synthesize")
 graph_builder.add_edge("resource",    "synthesize")
 graph_builder.add_edge("study_plan",  "synthesize")
 
-# synthesize → supervisor (second call)
-graph_builder.add_edge("synthesize",  "supervisor")
+graph_builder.add_edge("synthesize", "supervisor")
 
 # supervisor → judge
 # graph_builder.add_edge("supervisor",  "judge")
@@ -84,6 +79,6 @@ graph_builder.add_edge("synthesize",  "supervisor")
 
 #graph_builder.add_edge("force_final", END)
 
-graph_builder.add_edge("supervisor", END)
+# graph_builder.add_edge("supervisor", END)
 
 graph = graph_builder.compile()

@@ -25,7 +25,7 @@ WEAKEST TOPIC: one sentence
 SCORE TREND: one sentence
 ATTENDANCE IMPACT: one sentence
 
-Be specific with numbers. Max 4 lines total."""
+Be specific with numbers. Max 4 lines total. don't ask a question"""
 
 
 async def get_student_data(student_id: int) -> str:
@@ -114,3 +114,12 @@ Analyze this data and return your findings."""
 # }
 # result = performance_node(state)
 # print(result)
+#PARSING TEST
+# state = {
+#     #"question": query,
+#     "supervisor_instructions": """PERFORMANCE: find scores and attendance
+# CURRICULUM: find final exam topics
+# RESOURCE: find integration tutorials
+# STUDY_PLAN: find 3 week recovery plan"""
+# }
+# print(parse_instruction(state["supervisor_instructions"],"PERFORMANCE"))

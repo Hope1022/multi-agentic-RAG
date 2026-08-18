@@ -36,7 +36,7 @@ Rules:
 - second call: only write the final answer, nothing else
 - never make up information not in the reports
 - keep total response under 200 words
-- if question is too vague ask one clarifying question instead"""
+- never ask a question"""
 
 
 def supervisor_node(state):

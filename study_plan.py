@@ -17,7 +17,8 @@ serper = GoogleSerperAPIWrapper()
 def search_web(query: str) ->str:
     
     results = serper.run(query)
-    return results
+    
+    return results[:2000]  # limit to 2000 chars
 
 PLAN_SYSTEM_PROMPT = """You are an academic coach.
 Build a realistic study plan user specific based only on using the given Student question,
@@ -30,7 +31,7 @@ WEEK 3: one sentence focus
 DAILY TIME: how many hours per day
 PREDICTED OUTCOME: one sentence
 
-Max 5 lines total."""
+Max 5 lines total. and never ask a question"""
 
 def parse_instruction(instructions: str, agent: str) -> str:
     for line in instructions.split("\n"):
@@ -63,18 +64,18 @@ Analyze these results and return your findings."""
         HumanMessage(content=prompt)
     ])
 
-    return {"study_plan": response.content}    
-question = "I failed my calculus midterm. What do I do?"
-instructions = "find 3 week recovery strategies"
-web_scrape = search_web(instructions)
-prompt = f"""Student question: {question}
+    return {"study_plan_result": response.content}    
+# question = "I failed my calculus midterm. What do I do?"
+# instructions = "find 3 week recovery strategies"
+# web_scrape = search_web(instructions)
+# prompt = f"""Student question: {question}
 
-Your specific task or instruction: {instructions}
+# Your specific task or instruction: {instructions}
 
-Relevant web_search results:
-{web_scrape}
+# Relevant web_search results:
+# {web_scrape}
 
-Analyze these results and return your findings."""
+# Analyze these results and return your findings."""
 
 # system_message =SystemMessage(content=PLAN_SYSTEM_PROMPT)
 # human_message = HumanMessage(content=prompt)
@@ -82,3 +83,6 @@ Analyze these results and return your findings."""
 # full_chain = llm|StrOutputParser()
 # result = full_chain.invoke(messages)
 # print(result)
+#PARSING TEST
+#web search test
+# print(search_web("who is messi?"))
