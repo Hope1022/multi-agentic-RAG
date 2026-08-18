@@ -6,12 +6,12 @@ from dotenv import load_dotenv
 load_dotenv()
 groq_llm = ChatGroq(
     api_key=os.getenv("groq_api_key"),
-    model="llama-3.3-70b-versatile"
+    model="openai/gpt-oss-120b"
 )
 
 gemini_llm = ChatGoogleGenerativeAI(
     google_api_key=os.getenv("GEMINI_API_KEY"),
-    model="gemini-2.0-flash"
+    model="gemini-3.6-flash"
 )
 
 cohere_llm = ChatCohere(

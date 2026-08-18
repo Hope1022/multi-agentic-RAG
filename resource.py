@@ -2,6 +2,8 @@ from langchain_community.utilities import GoogleSerperAPIWrapper
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 import os
 from dotenv import load_dotenv
 from llm import gemini_llm as llm
@@ -32,8 +34,13 @@ RESOURCE 1: name and why it helps
 RESOURCE 2: name and why it helps
 RESOURCE 3: name and why it helps
 
-Only recommend real, specific, freely available and user specific resources. Max 3 lines total."""
-
+Only recommend real, specific, freely available and user specific resources. Max 3 lines total.
+and never ask a question"""
+prompt_template = ChatPromptTemplate.from_messages([
+  ("system",RESOURCE_SYSTEM_PROMPT),
+  ("human","{input}")
+])
+full_chain = prompt_template|llm|StrOutputParser()
 def parse_instruction(instructions: str, agent: str) -> str:
     for line in instructions.split("\n"):
         if line.startswith(f"{agent}:"):
@@ -59,12 +66,12 @@ Relevant web_search results:
 
 Analyze these results and return your findings."""
 
-    response = llm.invoke([
-        SystemMessage(content=RESOURCE_SYSTEM_PROMPT),
-        HumanMessage(content=prompt)
-    ])
+    response = full_chain.invoke(
+          {"input",prompt}
+        )
+    
 
-    return {"resource": response.content}    
+    return {"resource_result": response}    
 # question = "I failed my calculus midterm. What do I do?"
 # instructions = "find integration tutorials"
 # web_scrape = search_web(instructions)
