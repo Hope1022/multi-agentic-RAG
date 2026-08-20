@@ -19,4 +19,7 @@ cohere_llm = ChatCohere(
     model="command-a-03-2025"
 )
 
-#llm = groq_llm.with_fallbacks([gemini_llm, cohere_llm])
+llm = groq_llm.with_fallbacks([gemini_llm, cohere_llm])       
+llm_gemini = gemini_llm.with_fallbacks([groq_llm, cohere_llm]) 
+llm_cohere = cohere_llm.with_fallbacks([groq_llm, gemini_llm])
+

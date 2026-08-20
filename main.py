@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from graph import graph, StudentState
+from graph.graph import graph
 
 load_dotenv()
 

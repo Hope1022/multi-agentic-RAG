@@ -15,7 +15,8 @@ from dotenv import load_dotenv
 # from headroom import Smartcrusher
 from headroom.integrations.langchain import HeadroomChatModel
 from headroom.transforms.smart_crusher import SmartCrusher
-from llm import gemini_llm as llm
+#from llm import gemini_llm as llm
+from llm import llm_gemini as llm
 # if os.getenv("HF_TOKEN"):
 #     os.environ["HUGGINGFACE_HUB_TOKEN"] = os.getenv("HF_TOKEN")
 
@@ -59,7 +60,8 @@ full_chain = prompt_template|llm|StrOutputParser()
 def search_course_materials(query: str) -> str:
   embeddings =OllamaEmbeddings(model="nomic-embed-text")
   current_dir = os.path.dirname(os.path.abspath(__file__))
-  persistent_directory = os.path.join(current_dir, "db", "chroma_db")
+  project_root = os.path.dirname(current_dir) 
+  persistent_directory = os.path.join(project_root, "resources", "db", "chroma_db")
   client = chromadb.PersistentClient(path=persistent_directory)
     
   db = Chroma(
