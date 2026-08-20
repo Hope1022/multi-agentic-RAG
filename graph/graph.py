@@ -9,6 +9,9 @@ from agents.curriculum import curriculum_node
 from agents.resource import resource_node
 from agents.study_plan import study_plan_node
 from agents.judge import judge_node
+from safety.input.heuristic_node import heuristic_node
+from safety.input.llama_guard import llamaguard_node
+from safety.input.guardrail import guardrails_node
 
 load_dotenv()
 
@@ -25,6 +28,7 @@ class StudentState(TypedDict):
     judge_feedback:          str
     final_answer:            str
     retry_count:             int
+    is_safe:                 bool
 
 
 def should_retry(state: StudentState) -> str:
@@ -49,6 +53,10 @@ graph_builder.add_node("performance", performance_node)
 graph_builder.add_node("curriculum",  curriculum_node)
 graph_builder.add_node("resource",    resource_node)
 graph_builder.add_node("study_plan",  study_plan_node)
+graph_builder.add_node("heuristic", heuristic_node)
+graph_builder.add_node("llamaguard", llamaguard_node)
+graph_builder.add_node("guardrails", guardrails_node)
+
 #graph_builder.add_node("judge",       judge_node)
 #graph_builder.add_node("force_final", force_final)
 def route_supervisor(state):
@@ -56,7 +64,15 @@ def route_supervisor(state):
         return END
     return ["performance", "curriculum", "resource", "study_plan"]
 
-graph_builder.add_edge(START, "supervisor")
+graph_builder.add_edge(START, "heuristic")
+graph_builder.add_conditional_edges("heuristic", lambda s: "llamaguard" if s["is_safe"] else END)
+graph_builder.add_conditional_edges("llamaguard", lambda s: "guardrails" if s["is_safe"] else END)
+graph_builder.add_conditional_edges("guardrails", lambda s: "supervisor" if s["is_safe"] else END)
+# def go_next(s):
+#     if s["is_safe"]:
+#         return "llamaguard"
+#     else:
+#         return END
 graph_builder.add_conditional_edges("supervisor", route_supervisor)
 graph_builder.add_edge("performance", "synthesize")
 graph_builder.add_edge("curriculum",  "synthesize")

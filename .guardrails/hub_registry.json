@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "validators": {
+    "guardrails/toxic_language": {
+      "import_path": "guardrails_ai.toxic_language",
+      "exports": [
+        "ToxicLanguage"
+      ],
+      "installed_at": "2026-08-20T16:22:14.377170+00:00",
+      "package_name": "guardrails-ai-toxic-language"
+    }
+  }
+}
