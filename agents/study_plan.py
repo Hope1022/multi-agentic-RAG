@@ -3,7 +3,8 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
 import os
-from llm import groq_llm as llm
+#from llm import groq_llm as llm
+from llm import llm
 from dotenv import load_dotenv
 load_dotenv()
 SERPER_API_KEY = os.getenv("SERPER_API_KEY")

@@ -2,7 +2,8 @@ import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage
-from llm import groq_llm as llm
+#from llm import groq_llm as llm
+from llm import llm
 
 load_dotenv()
 # llm = ChatGroq(

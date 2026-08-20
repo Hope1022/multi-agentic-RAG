@@ -2,13 +2,13 @@ import os
 from dotenv import load_dotenv
 from langgraph.graph import StateGraph, START, END
 from typing import TypedDict
-from supervisor import supervisor_node
-from synthesize import synthesize_node
-from performance import performance_node
-from curriculum import curriculum_node
-from resource import resource_node
-from study_plan import study_plan_node
-from judge import judge_node
+from agents.supervisor import supervisor_node
+from graph.synthesize import synthesize_node
+from agents.performance import performance_node
+from agents.curriculum import curriculum_node
+from agents.resource import resource_node
+from agents.study_plan import study_plan_node
+from agents.judge import judge_node
 
 load_dotenv()
 
