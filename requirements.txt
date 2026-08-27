@@ -1,3 +1,31 @@
 fastapi==0.111.0
 uvicorn==0.30.1
 pydantic==2.8.2
+python-dotenv
+
+# LangGraph orchestration and LangChain integrations
+langgraph
+langsmith
+langchain-core
+langchain-community
+langchain-groq
+langchain-google-genai
+langchain-cohere
+langchain-chroma
+langchain-ollama
+langchain-text-splitters
+
+# Retrieval, document ingestion, and embeddings
+chromadb
+pypdf
+
+# PostgreSQL student data access
+asyncpg
+
+# Web search and input safety
+google-search-results
+guardrails-ai
+
+# Token counting and context compression utilities
+headroom
+tiktoken
