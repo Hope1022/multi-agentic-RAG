@@ -66,8 +66,8 @@ def route_supervisor(state):
 
 graph_builder.add_edge(START, "heuristic")
 graph_builder.add_conditional_edges("heuristic", lambda s: "llamaguard" if s["is_safe"] else END)
-graph_builder.add_conditional_edges("llamaguard", lambda s: "guardrails" if s["is_safe"] else END)
-graph_builder.add_conditional_edges("guardrails", lambda s: "supervisor" if s["is_safe"] else END)
+graph_builder.add_conditional_edges("llamaguard", lambda s: "supervisor" if s["is_safe"] else END)
+#graph_builder.add_conditional_edges("guardrails", lambda s: "supervisor" if s["is_safe"] else END)
 # def go_next(s):
 #     if s["is_safe"]:
 #         return "llamaguard"
